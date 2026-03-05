@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct Real_Time_Price_TrackerApp: App {
+    // route keeps navigation state
+    @StateObject private var route = Routing()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environmentObject(route)
         }
     }
 }
