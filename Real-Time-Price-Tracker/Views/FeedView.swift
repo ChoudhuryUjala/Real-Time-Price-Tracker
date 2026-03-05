@@ -7,10 +7,15 @@
 
 import SwiftUI
 
-struct FeedView: View {
+struct FeedView : View {
+    @StateObject private var viewModel = FeedViewModel(store: FeedStore(), service: FeedService())
+    
     var body: some View {
-        Text("FEED SCREEN")
-            .navigationTitle("Feed")
+        List(viewModel.symbols){ symbol in
+            FeedRowView(symbol: symbol)
+        }.onAppear {
+            viewModel.fetchFeed()
+        }.navigationTitle("Feed")
     }
 }
 
