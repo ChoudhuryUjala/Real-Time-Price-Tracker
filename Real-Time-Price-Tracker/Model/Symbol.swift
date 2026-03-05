@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Symbol: Identifiable {
+struct Symbol: Identifiable, Codable {
     var id: String
     var currentPrice: Double
     var previousPrice: Double
@@ -23,6 +23,11 @@ extension Symbol {
     var isHigh: Bool {
         return (currentPrice > previousPrice)
     }
+}
+
+struct WSSDataModel: Codable {
+    var id: String
+    var newPrice: Double
 }
 
 

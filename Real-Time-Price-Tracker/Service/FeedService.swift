@@ -9,7 +9,9 @@ import Foundation
 
 
 class FeedService {
+    
     //dummy hardoded data
+    
     let stockSymbols = [
             "AAPL": "Apple Inc. designs consumer electronics, software, and services including iPhone, Mac, and iCloud.",
               "GOOG": "Alphabet Inc., the parent company of Google, dominates search, advertising, and cloud computing.",

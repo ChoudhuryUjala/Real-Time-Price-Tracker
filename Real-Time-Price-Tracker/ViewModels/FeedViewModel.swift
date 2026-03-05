@@ -16,20 +16,26 @@ class FeedViewModel: FeedVMProtocol, ObservableObject {
     @Published var symbols: [Symbol] = []
     
     var store: FeedStore
-    var service: FeedService
+    var restService: FeedService
+    var wssService: WebSocketService
     
-    init(store: FeedStore, service: FeedService) {
+    init(store: FeedStore, restService: FeedService, wssService: WebSocketService) {
         self.store = store
-        self.service = service
+        self.restService = restService
+        self.wssService = wssService
+        self.wssService.store = store
+        
         store.$symbols.assign(to: &$symbols)
+        do {
+            
+            try wssService.connect()
+        }catch {
+            print(error.localizedDescription) // improvise later
+        }
     }
     
     func fetchFeed() {
-        if store.symbols.isEmpty {
-            service.fetchFeed(store)
-        } else {
-            //wss connect
-        }
+        restService.fetchFeed(store)
     }
     
 }
