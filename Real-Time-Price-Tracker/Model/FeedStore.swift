@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+@MainActor
 class FeedStore: ObservableObject {
     @Published var symbols: [Symbol] = []
     

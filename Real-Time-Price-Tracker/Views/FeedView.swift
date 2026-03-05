@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct FeedView : View {
-    @StateObject private var viewModel = FeedViewModel(store: FeedStore(), restService: FeedService(), wssService: WebSocketService())
+    
+    @StateObject var viewModel: FeedViewModel
     
     var body: some View {
         List(viewModel.symbols){ symbol in
@@ -20,5 +21,7 @@ struct FeedView : View {
 }
 
 #Preview {
-    FeedView()
+    FeedView(viewModel: FeedViewModel(store: FeedStore(),
+                                      restService: FeedService(),
+                                      wssService: WebSocketService()))
 }

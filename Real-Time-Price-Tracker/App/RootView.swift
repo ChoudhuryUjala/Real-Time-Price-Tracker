@@ -10,18 +10,30 @@ import SwiftUI
 struct RootView: View {
     
     @EnvironmentObject private var route: Routing
+    @StateObject private var store : FeedStore
+    private var feedService = FeedService()
+    
+    init() {
+        _store = StateObject(wrappedValue: FeedStore())
+        self.feedService = FeedService()
+    }
     
     var body: some View {
         NavigationStack(path: $route.path) {
-            FeedView()
-                .navigationDestination(for: Route.self) { path in
-                    switch path {
-                    case .feed:
-                        FeedView()
-                    case .symbolDetails:
-                        SymbolDetailsView()
-                    }
+            FeedView(viewModel: FeedViewModel(store: store,
+                                              restService: feedService,
+                                              wssService: WebSocketService()))
+            .navigationDestination(for: Route.self) { path in
+                switch path {
+                case .feed:
+                    FeedView(viewModel: FeedViewModel(store: store,
+                                                      restService: feedService,
+                                                      wssService: WebSocketService()))
+                case .symbolDetails(let id):
+                    SymbolDetailsView(viewModel: SymbolDetailsViewModel(store: store,
+                                                                        symbolId: id))
                 }
+            }
         }
     }
 }

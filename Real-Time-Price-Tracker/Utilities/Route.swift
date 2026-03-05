@@ -9,7 +9,7 @@ import Foundation
 
 enum Route: Hashable {
     case feed
-    case symbolDetails
+    case symbolDetails(id:String)
 }
 
 class Routing: ObservableObject {

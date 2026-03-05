@@ -6,11 +6,12 @@
 //
 
 import Foundation
-
+@MainActor
 protocol FeedVMProtocol {
     func fetchFeed()
 }
 
+@MainActor
 class FeedViewModel: FeedVMProtocol, ObservableObject {
     
     @Published var symbols: [Symbol] = []
@@ -24,16 +25,18 @@ class FeedViewModel: FeedVMProtocol, ObservableObject {
         self.restService = restService
         self.wssService = wssService
         self.wssService.store = store
-        
-        store.$symbols.assign(to: &$symbols)
+        wssService.disconnect()
+        bind()
         do {
-            
             try wssService.connect()
         }catch {
-            print(error.localizedDescription) // improvise later
+            print(error.localizedDescription) 
         }
     }
     
+    func bind() {
+        store.$symbols.assign(to: &$symbols)
+    }
     func fetchFeed() {
         restService.fetchFeed(store)
     }

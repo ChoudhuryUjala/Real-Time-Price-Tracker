@@ -17,7 +17,7 @@ enum ServiceError: Error {
 class WebSocketService {
     
     var socket: URLSessionWebSocketTask?
-    var tasks: [Task<Void, Never>] = []
+    var tasks: [Task<Void, Error>] = []
     var wssURLString: String {
         "wss://ws.postman-echo.com/raw"
     }
@@ -29,8 +29,10 @@ class WebSocketService {
         socket = URLSession.shared.webSocketTask(with: wssURL)
         socket?.resume()
         ping()
-        //send
-        //receive
+        
+        tasks.append(Task { try await receiveData()})
+        tasks.append(Task { try await sendData()})
+        
     }
     
     func disconnect() {
@@ -48,43 +50,39 @@ class WebSocketService {
         }
     }
     
-    func sendMessage() async throws {
-        guard let symbols = store?.symbols else { throw ServiceError.dataIssue }
-        
+    func sendData() async throws {
+        guard let symbols = await store?.symbols, !symbols.isEmpty else { throw ServiceError.dataIssue }
         do{
             while !Task.isCancelled {
                try await Task.sleep(for: .seconds(2))
-                
                 for symbol in symbols {
-                    let symbolDataModel = WSSDataModel(id: symbol.id, newPrice: Double.random(in: 100...1000))
-                    if let jsonData = try? JSONEncoder().encode(symbolDataModel) {
-                        try await socket?.send(.data(jsonData))
-                    }
+                    
+                    let newPrice = String(format: "%.2f", Double.random(in: 100...1000))
+                    let message = "\(symbol.id):\(newPrice)"
+                    try await socket?.send(.string(message))
                 }
             }
-        }catch {
+        } catch {
            throw error
         }
     }
     
-    func receiveMessage() async throws {
-        for await data in dataStream() {
-            try store?.updatePrice(symId: data.id, newPrice: data.newPrice)
+    func receiveData() async throws {
+        for await message in messageStream() {
+            let wssModel: WSSDataModel = decode(message)
+            try await store?.updatePrice(symId: wssModel.id, newPrice: wssModel.newPrice)
         }
     }
     
-    func dataStream() -> AsyncStream<WSSDataModel> {
+    func messageStream() -> AsyncStream<String> {
         AsyncStream { continuation in
             func receive() {
                 socket?.receive { result in
                     switch result {
-                    case .success(.data(let data)):
-                        do {
-                            let receivedObj = try JSONDecoder().decode(WSSDataModel.self, from: data)
-                            continuation.yield(receivedObj)
-                        }catch{
-                            continuation.finish()
-                        }
+                    case .success(.string(let message)):
+                        print(message)
+                        continuation.yield(message)
+                       
                     case .failure(let error):
                         print(error.localizedDescription)
                         continuation.finish()
@@ -92,10 +90,18 @@ class WebSocketService {
                         break
                     }
                     receive()
+                   
                 }
             }
             receive()
         }
+    }
+    
+    func decode(_ message: String) -> WSSDataModel {
+        let messageSubString = message.split(separator: ":")
+        let id = String(messageSubString[0])
+        let price = Double(messageSubString[1]) ?? 0.0
+        return WSSDataModel(id: id, newPrice: price)
     }
     
 }

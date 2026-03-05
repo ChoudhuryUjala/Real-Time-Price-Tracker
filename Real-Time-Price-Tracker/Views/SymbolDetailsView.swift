@@ -8,12 +8,30 @@
 import SwiftUI
 
 struct SymbolDetailsView: View {
+    
+    @StateObject var viewModel: SymbolDetailsViewModel
+    
     var body: some View {
-        Text("DETAILS SCREEN")
-            .navigationTitle("Symbol details")
+        VStack(alignment: .leading) {
+            HStack {
+                Text(viewModel.symbol?.id ?? "")
+                    .font(.largeTitle)
+                Spacer()
+                Text(String(viewModel.symbol?.currentPrice ?? 0.0))
+                Text(viewModel.symbol?.isHigh ?? false ? "↑" : "↓")
+                    .foregroundStyle(viewModel.symbol?.isHigh ?? false ? .green : .red)
+                
+            }.padding(.bottom, 10)
+            Text("About:")
+                .font(.headline)
+            Text(viewModel.symbol?.description ?? "")
+                .font(.subheadline)
+            Spacer()
+        }.navigationTitle("Symbol details")
+            .padding()
     }
 }
 
 #Preview {
-    SymbolDetailsView()
+    SymbolDetailsView(viewModel: SymbolDetailsViewModel(store: FeedStore(), symbolId: "NFLX"))
 }

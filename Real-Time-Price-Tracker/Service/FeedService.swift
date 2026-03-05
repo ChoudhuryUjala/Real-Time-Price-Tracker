@@ -40,6 +40,7 @@ class FeedService {
               "MA": "Mastercard runs a worldwide payment processing network."
     ]
     
+    @MainActor
     func fetchFeed(_ store: FeedStore) {
         store.symbols = stockSymbols.map { Symbol(id: $0.key, currentPrice: Double.random(in: 100...1000), previousPrice: Double.random(in: 100...1000), description: $0.value)}.sorted {$0.currentPrice > $1.currentPrice}
     }
