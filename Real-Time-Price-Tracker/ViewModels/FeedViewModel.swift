@@ -15,30 +15,55 @@ protocol FeedVMProtocol {
 class FeedViewModel: FeedVMProtocol, ObservableObject {
     
     @Published var symbols: [Symbol] = []
+    @Published var isOnline: Bool = false
+    @Published var isRunning: Bool = false
     
     var store: FeedStore
     var restService: FeedService
     var wssService: WebSocketService
+    var reachability: ReachabilityService
     
-    init(store: FeedStore, restService: FeedService, wssService: WebSocketService) {
+    init(store: FeedStore, restService: FeedService, wssService: WebSocketService, reachability: ReachabilityService) {
         self.store = store
         self.restService = restService
         self.wssService = wssService
         self.wssService.store = store
-        wssService.disconnect()
+        self.reachability = reachability
+        
+        disconnectFeed()
         bind()
-        do {
-            try wssService.connect()
-        }catch {
-            print(error.localizedDescription) 
-        }
+        connectToFeed()
     }
     
     func bind() {
         store.$symbols.assign(to: &$symbols)
+        reachability.$isConnected.assign(to: &$isOnline)
     }
     func fetchFeed() {
         restService.fetchFeed(store)
+    }
+    
+    func connectToFeed() {
+        do {
+            try wssService.connect()
+            isRunning = true
+        }catch {
+            isRunning = false
+            print(error.localizedDescription)
+        }
+    }
+    
+    func disconnectFeed() {
+        isRunning = false
+        wssService.disconnect()
+    }
+    
+    func toggleWSS() {
+        if isRunning {
+            connectToFeed()
+        }else {
+            disconnectFeed()
+        }
     }
     
 }

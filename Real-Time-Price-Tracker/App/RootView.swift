@@ -10,11 +10,14 @@ import SwiftUI
 struct RootView: View {
     
     @EnvironmentObject private var route: Routing
+    
     @StateObject private var store : FeedStore
     private var feedService = FeedService()
+    @StateObject private var reachability: ReachabilityService
     
     init() {
         _store = StateObject(wrappedValue: FeedStore())
+        _reachability = StateObject(wrappedValue: ReachabilityService())
         self.feedService = FeedService()
     }
     
@@ -22,13 +25,15 @@ struct RootView: View {
         NavigationStack(path: $route.path) {
             FeedView(viewModel: FeedViewModel(store: store,
                                               restService: feedService,
-                                              wssService: WebSocketService()))
+                                              wssService: WebSocketService(),
+                                              reachability: reachability))
             .navigationDestination(for: Route.self) { path in
                 switch path {
                 case .feed:
                     FeedView(viewModel: FeedViewModel(store: store,
                                                       restService: feedService,
-                                                      wssService: WebSocketService()))
+                                                      wssService: WebSocketService(),
+                                                      reachability: reachability))
                 case .symbolDetails(let id):
                     SymbolDetailsView(viewModel: SymbolDetailsViewModel(store: store,
                                                                         symbolId: id))

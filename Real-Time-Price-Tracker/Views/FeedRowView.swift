@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct FeedRowView: View {
-    @EnvironmentObject var route: Routing
     
     var symbol: Symbol
         
@@ -21,9 +20,6 @@ struct FeedRowView: View {
             Text(symbol.isHigh ? "↑" : "↓")
                 .foregroundStyle(symbol.isHigh ? .green : .red)
         }.padding()
-            .onTapGesture {
-                route.push(.symbolDetails(id: symbol.id))
-            }
     }
 }
 

@@ -57,7 +57,7 @@ class WebSocketService {
                try await Task.sleep(for: .seconds(2))
                 for symbol in symbols {
                     
-                    let newPrice = String(format: "%.2f", Double.random(in: 100...1000))
+                    let newPrice = String(Double.random(in: 100...1000))
                     let message = "\(symbol.id):\(newPrice)"
                     try await socket?.send(.string(message))
                 }

@@ -17,11 +17,12 @@ struct SymbolDetailsView: View {
                 Text(viewModel.symbol?.id ?? "")
                     .font(.largeTitle)
                 Spacer()
-                Text(String(viewModel.symbol?.currentPrice ?? 0.0))
+                Text(String(format: "%.2f",viewModel.symbol?.currentPrice ?? 0.0))
                 Text(viewModel.symbol?.isHigh ?? false ? "↑" : "↓")
                     .foregroundStyle(viewModel.symbol?.isHigh ?? false ? .green : .red)
                 
             }.padding(.bottom, 10)
+                .padding(.top, 10)
             Text("About:")
                 .font(.headline)
             Text(viewModel.symbol?.description ?? "")

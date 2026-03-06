@@ -10,18 +10,30 @@ import SwiftUI
 struct FeedView : View {
     
     @StateObject var viewModel: FeedViewModel
-    
+    @EnvironmentObject var route: Routing
+
     var body: some View {
-        List(viewModel.symbols){ symbol in
-            FeedRowView(symbol: symbol)
-        }.onAppear {
-            viewModel.fetchFeed()
-        }.navigationTitle("Feed")
+        VStack {
+            ConnectionStatusView(isConnected: viewModel.isOnline,
+                                 isRunning: $viewModel.isRunning) { isOn in
+                viewModel.toggleWSS()
+            }
+            List(viewModel.symbols){ symbol in
+                FeedRowView(symbol: symbol)
+                    .contentShape(Rectangle()) 
+                    .onTapGesture {
+                        route.push(.symbolDetails(id: symbol.id))
+                    }
+            }.onAppear {
+                viewModel.fetchFeed()
+            }.navigationTitle("Feed")
+        }
     }
 }
 
 #Preview {
     FeedView(viewModel: FeedViewModel(store: FeedStore(),
                                       restService: FeedService(),
-                                      wssService: WebSocketService()))
+                                      wssService: WebSocketService(),
+                                      reachability: ReachabilityService()))
 }
