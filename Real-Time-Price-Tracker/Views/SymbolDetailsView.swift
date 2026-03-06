@@ -12,21 +12,24 @@ struct SymbolDetailsView: View {
     @StateObject var viewModel: SymbolDetailsViewModel
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text(viewModel.symbol?.id ?? "")
-                    .font(.largeTitle)
-                Spacer()
-                Text(String(format: "%.2f",viewModel.symbol?.currentPrice ?? 0.0))
-                Text(viewModel.symbol?.isHigh ?? false ? "↑" : "↓")
-                    .foregroundStyle(viewModel.symbol?.isHigh ?? false ? .green : .red)
+        VStack(alignment: .leading, spacing: 16) {
+            if let symbol = viewModel.symbol {
+                HStack {
+                    Text(symbol.id)
+                        .font(.largeTitle)
+                    Spacer()
+                    PriceIndicators(content: symbol.decoratedCurrentPrice, indicator: symbol.isHigh)
+                }
                 
-            }.padding(.bottom, 10)
-                .padding(.top, 10)
-            Text("About:")
-                .font(.headline)
-            Text(viewModel.symbol?.description ?? "")
-                .font(.subheadline)
+                if let description = viewModel.symbol?.description, !description.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("About:")
+                            .font(.headline)
+                        Text(description)
+                            .font(.subheadline)
+                    }
+                }
+            }
             Spacer()
         }.navigationTitle("Symbol details")
             .padding()

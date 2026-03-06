@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Combine
+
 @MainActor
 protocol FeedVMProtocol {
     func fetchFeed()
@@ -17,6 +19,7 @@ class FeedViewModel: FeedVMProtocol, ObservableObject {
     @Published var symbols: [Symbol] = []
     @Published var isOnline: Bool = false
     @Published var isRunning: Bool = false
+    var cancellables = Set<AnyCancellable>()
     
     var store: FeedStore
     var restService: FeedService
@@ -27,7 +30,6 @@ class FeedViewModel: FeedVMProtocol, ObservableObject {
         self.store = store
         self.restService = restService
         self.wssService = wssService
-        self.wssService.store = store
         self.reachability = reachability
         
         disconnectFeed()
@@ -35,25 +37,43 @@ class FeedViewModel: FeedVMProtocol, ObservableObject {
         connectToFeed()
     }
     
-    func bind() {
+    private func bind() {
         store.$symbols.assign(to: &$symbols)
         reachability.$isConnected.assign(to: &$isOnline)
+        
+        wssService.publisher.sink (receiveCompletion: { [weak self] completion in
+            switch completion {
+            case .finished:
+                self?.isRunning = false
+            case .failure(let error):
+                print("Error - \(error)")
+                self?.isRunning = false
+            }
+        }, receiveValue: {[weak self] model in
+            self?.store.updatePrice(symId: model.id, newPrice: model.newPrice)
+        })
+        .store(in: &cancellables)
+        
+        
+        $symbols
+            .sink { [weak self] symbols in
+                self?.wssService.symbols.send(symbols)
+            }
+            .store(in: &cancellables)
+        
+        
     }
+    
     func fetchFeed() {
         restService.fetchFeed(store)
     }
     
-    func connectToFeed() {
-        do {
-            try wssService.connect()
-            isRunning = true
-        }catch {
-            isRunning = false
-            print(error.localizedDescription)
-        }
+    private func connectToFeed() {
+        wssService.connect()
+        isRunning = true
     }
     
-    func disconnectFeed() {
+    private func disconnectFeed() {
         isRunning = false
         wssService.disconnect()
     }

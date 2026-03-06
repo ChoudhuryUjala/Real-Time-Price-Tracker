@@ -12,8 +12,9 @@ struct RootView: View {
     @EnvironmentObject private var route: Routing
     
     @StateObject private var store : FeedStore
-    private var feedService = FeedService()
     @StateObject private var reachability: ReachabilityService
+    
+    private var feedService = FeedService()
     
     init() {
         _store = StateObject(wrappedValue: FeedStore())

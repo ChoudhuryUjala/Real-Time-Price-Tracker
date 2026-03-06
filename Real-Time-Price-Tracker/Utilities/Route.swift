@@ -15,7 +15,10 @@ enum Route: Hashable {
 class Routing: ObservableObject {
    @Published var path: [Route] = []
     
-    func pop() {}
+    func pop() {
+        guard !path.isEmpty else { return }
+        let _ = path.popLast()
+    }
     
     func push(_ newPath: Route) {
         self.path.append(newPath)

@@ -20,7 +20,7 @@ class SymbolDetailsViewModel: ObservableObject {
         bind()
     }
     
-    func bind() {
+    private func bind() {
         store.$symbols
             .map{$0.first{ $0.id == self.symbolId}}
             .assign(to: &$symbol)

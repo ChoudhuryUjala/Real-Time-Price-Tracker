@@ -22,6 +22,7 @@ struct ConnectionStatusView: View {
                 Text(isRunning ? "Stop Feed" : "Start Feed")
                     .fontWeight(.semibold)
             }
+            .labelsHidden()
             .disabled(!isConnected)
             .onChange(of: isRunning) { oldValue, newValue in
                 toggleAction(newValue)

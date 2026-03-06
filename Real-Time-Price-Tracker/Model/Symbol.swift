@@ -25,6 +25,12 @@ extension Symbol {
     }
 }
 
+extension Symbol {
+    var decoratedCurrentPrice: String {
+        return "\u{20B9}\(String(format: "%.2f", currentPrice))"
+    }
+}
+
 struct WSSDataModel: Codable {
     var id: String
     var newPrice: Double
