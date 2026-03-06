@@ -8,14 +8,20 @@
 import Foundation
 import Combine
 
+enum ServiceError: Error {
+    case error(reason: String)
+}
+
 class WebSocketService {
     
     var socket: URLSessionWebSocketTask?
     var wssURLString: String {
         "wss://ws.postman-echo.com/raw"
     }
-    var publisher = PassthroughSubject<WSSDataModel, Error>()
+    var publisher = PassthroughSubject<WSSDataModel, Never>()
     let symbols = CurrentValueSubject<[Symbol], Never>([])
+    let errorPublisher = PassthroughSubject<ServiceError, Never>()
+    
     var cancellables = Set<AnyCancellable>()
     
     
@@ -107,7 +113,7 @@ class WebSocketService {
             return
         } else {
             DispatchQueue.main.async {
-                self.publisher.send(completion: .failure(error))
+                self.errorPublisher.send(.error(reason: error.localizedDescription))
             }
         }
         print(error.localizedDescription)

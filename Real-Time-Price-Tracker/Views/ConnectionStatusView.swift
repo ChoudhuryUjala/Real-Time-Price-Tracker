@@ -9,26 +9,22 @@ import SwiftUI
 
 struct ConnectionStatusView: View {
     
-    let isConnected: Bool
+    var isConnected: Bool
     @Binding var isRunning: Bool
     let toggleAction: (Bool) -> Void
     
     var body: some View {
         HStack{
+            let _ = print("Connected: \(isConnected)")
             Text(isConnected ? "🟢 Connected" : "🔴 Disconnected")
                 .fontWeight(.semibold)
             Spacer()
-            Toggle(isOn: $isRunning) {
-                Text(isRunning ? "Stop Feed" : "Start Feed")
-                    .fontWeight(.semibold)
-            }
-            .labelsHidden()
+            Toggle(isOn: $isRunning) {}
             .disabled(!isConnected)
             .onChange(of: isRunning) { oldValue, newValue in
                 toggleAction(newValue)
             }
         }.padding()
-            .background(.ultraThinMaterial)
-            .overlay(Divider(), alignment: .bottom)
+        .overlay(Divider(), alignment: .bottom)
     }
 }

@@ -17,5 +17,4 @@ class FeedStore: ObservableObject {
         symbols[outdatedIndex].previousPrice = outdatedPrice
         symbols[outdatedIndex].currentPrice = newPrice
     }
-    
 }

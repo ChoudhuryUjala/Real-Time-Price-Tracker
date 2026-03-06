@@ -18,7 +18,7 @@ struct SymbolDetailsView: View {
                     Text(symbol.id)
                         .font(.largeTitle)
                     Spacer()
-                    PriceIndicators(content: symbol.decoratedCurrentPrice, indicator: symbol.isHigh)
+                    PriceIndicatorView(content: symbol.decoratedCurrentPrice, indicator: symbol.isHigh)
                 }
                 
                 if let description = viewModel.symbol?.description, !description.isEmpty {

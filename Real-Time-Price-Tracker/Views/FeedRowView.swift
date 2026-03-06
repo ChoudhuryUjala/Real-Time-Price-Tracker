@@ -16,8 +16,8 @@ struct FeedRowView: View {
             Text("\(symbol.id)")
                 .font(.headline)
             Spacer()
-            PriceIndicators(content: symbol.decoratedCurrentPrice, indicator: symbol.isHigh)
-        }.padding()
+            PriceIndicatorView(content: symbol.decoratedCurrentPrice, indicator: symbol.isHigh)
+        }.padding(.all, 8)
     }
 }
 

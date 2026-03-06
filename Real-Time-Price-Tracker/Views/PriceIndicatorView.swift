@@ -1,5 +1,5 @@
 //
-//  PriceIndicators.swift
+//  PriceIndicatorView.swift
 //  Real-Time-Price-Tracker
 //
 //  Created by Ujala on 06/03/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PriceIndicators: View {
+struct PriceIndicatorView: View {
     
     var content: String
     var indicator: Bool
@@ -20,5 +20,5 @@ struct PriceIndicators: View {
 }
 
 #Preview {
-    PriceIndicators(content: "$899", indicator: true)
+    PriceIndicatorView(content: "$899", indicator: true)
 }

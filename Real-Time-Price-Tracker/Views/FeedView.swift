@@ -13,7 +13,7 @@ struct FeedView : View {
     @EnvironmentObject var route: Routing
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             ConnectionStatusView(isConnected: viewModel.isOnline,
                                  isRunning: $viewModel.isRunning) { isOn in
                 viewModel.toggleWSS()

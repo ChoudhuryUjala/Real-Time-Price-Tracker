@@ -9,12 +9,7 @@ import Foundation
 import Combine
 
 @MainActor
-protocol FeedVMProtocol {
-    func fetchFeed()
-}
-
-@MainActor
-class FeedViewModel: FeedVMProtocol, ObservableObject {
+class FeedViewModel: ObservableObject {
     
     @Published var symbols: [Symbol] = []
     @Published var isOnline: Bool = false
@@ -54,14 +49,19 @@ class FeedViewModel: FeedVMProtocol, ObservableObject {
         })
         .store(in: &cancellables)
         
+        wssService.errorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] error in
+                print("WSS Error:", error)
+                self?.isRunning = false
+            }
+            .store(in: &cancellables)
         
         $symbols
             .sink { [weak self] symbols in
                 self?.wssService.symbols.send(symbols)
             }
             .store(in: &cancellables)
-        
-        
     }
     
     func fetchFeed() {

@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B0FCD0F92F5AD59F00086402 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = B0FCD0F82F5AD59F00086402 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		B0FCD0A72F58C9CC00086402 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		B0FCD0982F58C9CA00086402 /* Real-Time-Price-Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Real-Time-Price-Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0FCD0A62F58C9CC00086402 /* Real-Time-Price-TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Real-Time-Price-TrackerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0FCD0B02F58C9CC00086402 /* Real-Time-Price-TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Real-Time-Price-TrackerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0FCD0F82F5AD59F00086402 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		B0FCD08F2F58C9CA00086402 = {
 			isa = PBXGroup;
 			children = (
+				B0FCD0F82F5AD59F00086402 /* README.md */,
 				B0FCD09A2F58C9CA00086402 /* Real-Time-Price-Tracker */,
 				B0FCD0A92F58C9CC00086402 /* Real-Time-Price-TrackerTests */,
 				B0FCD0B32F58C9CC00086402 /* Real-Time-Price-TrackerUITests */,
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0FCD0F92F5AD59F00086402 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
