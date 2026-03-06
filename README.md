@@ -10,11 +10,15 @@ This repo is code base for an iOS application using SwiftUI that displays real-t
  Feed view
  - Displays live symbol name, price and its variation indicator.
  - Shows Connectivity and a wway to  on/off the live feeds
+   
    <img width="300" height="700" alt="Simulator Screenshot - iPhone 16 Pro - 2026-03-06 at 14 46 15" src="https://github.com/user-attachments/assets/ba65f447-955f-4f86-835c-844be2623699" />
+   
  
  Symbol Detail View
  - Displays details of symbol along with live variation of price
+   
    <img width="300" height="700" alt="Simulator Screenshot - iPhone 16 Pro - 2026-03-06 at 14 47 17" src="https://github.com/user-attachments/assets/9a5bf093-a866-4fc2-801c-d28d0e529b30" />
+
 
 ##Route
  A naviagtion stack over root view is establised as a central place for routing to different screens. It makes use of Route
